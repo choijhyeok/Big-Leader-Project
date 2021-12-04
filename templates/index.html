@@ -1,0 +1,858 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <script src="//developers.kakao.com/sdk/js/kakao.min.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <link rel="icon" type="image/png" href="images/logo.png" sizes="32x32" />
+  <link rel="icon" type="image/png" href="images/logo.png" sizes="16x16" />
+  <title>3이1최</title>
+  <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700,900" rel="stylesheet">
+  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"rel="stylesheet">
+  <link href="{{url_for('static',filename='./css/styles1.css')}}" rel="stylesheet">
+  <link href="{{url_for('static',filename='./css/custom-responsive-styles1.css')}}"rel="stylesheet">
+  <link type="text/css" rel="stylesheet" href="{{url_for('static', filename='./font/fonta.css')}}"/> 
+  <script src="{{url_for('static',filename='./js/jquery-3.2.1.min.js')}}"></script>
+  <script src="{{url_for('static',filename='./js/all-plugins.js')}}"></script>
+  <script src="{{url_for('static',filename='./js/plugins-activate.js')}}"></script>
+  <style>
+  /*위까지는 외부 css를 따온 코드*/
+  @font-face {
+    font-family: NanumBarunGothic;
+    src: url('.static/font/') format('truetype');
+    font-style: normal;
+    font-weight: normal;
+  }
+  body{
+    font-family: NanumBarunGothic;
+  }
+  /*위는 웹폰트를 설정하는 코드*/
+  </style>
+  <style>
+    div.left {
+        width: 80%;
+        float: left;
+    }
+    div.right {
+        width: 20%;
+        float: right;
+    }
+    button{ 
+      border: 1px solid skyblue; 
+      background-color: rgba(0,0,0,0); 
+      color: skyblue; padding: 5px; 
+      } 
+    button:hover{ 
+      color:white; 
+      background-color: skyblue; 
+      }
+      #browsers2{
+    background-color: white;
+    border: 1px solid #02ccbb;
+    border-radius: 10px;
+    display: inline-block;
+    font: inherit;
+    line-height: 1.5em;
+    padding: 0.5em 3.5em 0.5em 1em;
+
+margin: 0;
+-webkit-box-sizing: border-box;
+-moz-box-sizing: border-box;
+box-sizing: border-box;
+-webkit-appearance: none;
+-moz-appearance: none;
+
+
+background-image:
+linear-gradient(45deg, transparent 50%, gray 50%),
+linear-gradient(135deg, gray 50%, transparent 50%),
+radial-gradient(#ddd 70%, transparent 72%);
+background-position:
+calc(100% - 20px) calc(1em + 2px),
+calc(100% - 15px) calc(1em + 2px),
+calc(100% - .5em) .5em;
+background-size:
+5px 5px,
+5px 5px,
+1.5em 1.5em;
+background-repeat: no-repeat;
+}
+/*위는 div태그의 공간크기 버튼위에 마우스 올려두었을때 효과 
+browsers2는 드롭다운 메뉴의 스타일 조정 background-image는 첫 화면의 이미지의 크기를 조정한것*/
+
+    </style>
+    <script type="text/javascript">
+      var stmnLEFT = 8; // 오른쪽 여백 
+      var stmnGAP1 = 100; // 위쪽 여백 
+      var stmnGAP2 = 200; // 스크롤시 브라우저 위쪽과 떨어지는 거리 
+      var stmnBASE = 200; // 스크롤 시작위치 
+      var stmnActivateSpeed = 10; //스크롤을 인식하는 딜레이 (숫자가 클수록 느리게 인식)
+      var stmnScrollSpeed = 0; //스크롤 속도 (클수록 느림)
+      var stmnTimer; 
+      
+      function RefreshStaticMenu() { 
+       var stmnStartPoint, stmnEndPoint; 
+       stmnStartPoint = parseInt(document.getElementById('STATICMENU').style.top, 10); 
+       stmnEndPoint = Math.max(document.documentElement.scrollTop, document.body.scrollTop) + stmnGAP2; 
+       if (stmnEndPoint < stmnGAP1) stmnEndPoint = stmnGAP1; 
+       if (stmnStartPoint != stmnEndPoint) { 
+        stmnScrollAmount = Math.ceil( Math.abs( stmnEndPoint - stmnStartPoint ) / 15 ); 
+        document.getElementById('STATICMENU').style.top = parseInt(document.getElementById('STATICMENU').style.top, 10) + ( ( stmnEndPoint<stmnStartPoint ) ? -stmnScrollAmount : stmnScrollAmount ) + 'px'; 
+        stmnRefreshTimer = stmnScrollSpeed; 
+        }
+       stmnTimer = setTimeout("RefreshStaticMenu();", stmnActivateSpeed); 
+       } 
+      function InitializeStaticMenu() {
+       document.getElementById('STATICMENU').style.right = stmnLEFT + 'px';  //처음에 오른쪽에 위치. left로 바꿔도.
+       document.getElementById('STATICMENU').style.top = document.body.scrollTop + stmnBASE + 'px'; 
+       RefreshStaticMenu();
+       }
+     </script>
+     <style>
+       #STATICMENU{
+         position:absolute;top: 50px; z-index: 0;
+       }
+     </style>
+</head>
+<!-- 위는 네비게이션 바를 설정하는 코드 각각 중요부분에 주석을 달아놓았음 -->
+<body id="page-top" onload="InitializeStaticMenu();">
+ 
+
+ <div id="STATICMENU" style=" position: absolute; top: 10px;">
+  <p style="position:relative;right:60px;top:180px;">위반패턴</p>
+  <p style="position:relative;right:60px;top:200px;">행정동별</p>
+  <p style="position:relative;right:60px;top:220px;">추천지역</p>
+  <p style="position:relative;right:60px;top:240px;">업체정보</p>
+  <img onclick="location.href='#L1'" src="http://drive.google.com/uc?export=view&id=14z4tKw7ZDvjm9FFBxvaF78QofT6sYBbd" alt="" style="cursor:pointer;">
+  <br><img onclick="location.href='#L2'" src="http://drive.google.com/uc?export=view&id=1kcqXiqFts3Ax8Bu6YEDrzcWmMx0x7W0H" alt="" style="cursor:pointer;">
+  <br><img onclick="location.href='#L3'" src="http://drive.google.com/uc?export=view&id=1vpSTnpkm6nvo_rbaE38vyBqyYHya3d9f" alt="" style="cursor:pointer;">
+  <br><img onclick="location.href='#L4'" src="http://drive.google.com/uc?export=view&id=1LS_alKZSZSu5pmEV6M4sw4rnICwHT8Ju" alt="" style="cursor:pointer;">
+  <br><img  id="kakao-link-btn" href="javascript:sendLink()" src="//developers.kakao.com/assets/img/about/logos/kakaolink/kakaolink_btn_medium.png"/>
+  </div>
+  <!-- 내비게이션에 들어가는 내용 위반패턴~업체정보까지는 onclick 을 통해서 정해진 위치로 이동 
+  마지막 카카오이미지는 카카오 공유기능을 카카오 api에서 따옴 -->
+
+   <section class="content-section" style=" position: relative;
+  color: #fff; 
+  background: url('./static/images/3Lee_1choi.png') no-repeat center center; 
+  background-size: 1700px 820px;
+  height:900px; z-index: 9999;" >
+   <!-- 첫시작 위치에 이미지를 띄우는 것  -->
+    <div class="container content-wrap text-center">
+      <p style="font-size: 50px;"></p>
+      <p style="font-size: 20px; text-align: center; font-style: bolid;"></p>
+      <div>
+          <P style="font-size: 30px; position: relative; top: 30px;"></p>
+          <p style="font-size: 20px; position: relative; top:  30px;"></p>
+      </div>
+      <li class="list-inline-item">
+        <a class="social-link rounded-circle text-white mr-3" href="javascript:void(0)">
+        </a>
+      </li>
+      
+    </div>
+    <div class="overlay"></div>
+  </section>
+    <!-- 위는 공간을 지정하기위해서 빈공간으로 지정해둔것 -->
+  <section  class="content-section" >
+  <section id="Testimonials" class="content-section"style="background-color: white; ">
+
+
+
+    <div  id="About" class="container" >
+      <div  id="L1" class="row">
+        <div class="col-sm-12"   >
+          <div class="block-heading">
+            <h2 >최근 10년 원산지 표기법 위반 패턴</h2>
+         
+          </div>
+          <div id="customers-testimonials" class="owl-carousel"  >
+     
+              <div class="item"  >
+                <div class="shadow-effect" style="width: 800px;height: 500px;  position: relative; right: 300px;">
+                <img class="img-circle" src="images/sarah.jpg" alt="">            
+                  <iframe src="year_mean_line.html" width="600px" height ="420px" frameborder="0" scrolling="no" >year_mean</iframe>
+              
+                
+                </div>
+                <div class="testimonial-name" style="position: absolute; top: auto; left: 100px;">연평균 적발건수</div>
+           </div>
+            <div class="item" >
+              <div class="shadow-effect" style="width: 800px;height: 500px; position: relative; right: 300px;">
+           
+                <iframe src="year_jucval.html" width="600px" height ="420px" frameborder="0" scrolling="no">year_jucval</iframe>
+              </div>
+              <div class="testimonial-name" style="position: absolute; top: auto; left: 100px;">월별 적발건수</div>
+            </div>
+            <div class="item">
+              <div class="shadow-effect" style="width: 800px;height: 500px; position: relative; right: 300px;">
+                 <img class="img-circle" src="images/john-doe.jpg" alt="">
+             
+                <iframe src="pum_mok.html" width="600px" height ="420px" frameborder="0" scrolling="no">pum_mok</iframe>
+              </div>
+              <div class="testimonial-name" style="position: absolute; top: auto; left: 100px;">품목별 적발건수</div>
+            </div>
+            <div class="item" >
+              <div class="shadow-effect" style="width: 800px;height: 500px; position: relative; right: 300px;">
+                <img class="img-circle" src="images/amy.jpg" alt="">
+              
+                <iframe src="up_tae.html" width="600px" height ="420px" frameborder="0" scrolling="no">up_tae</iframe>
+              </div>
+              <div class="testimonial-name" style="position: absolute; top: auto; left: 100px;">업테별 적발건수</div>
+            </div>
+            
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- 이위에는 bokeh로 그린 그래프를 파이썬에서 html으로 출력해서 flask_app.py를 통해서 iframe에 띄울수 있게 설정후에
+  웹상에서 띄움 -->
+</section>
+  <section id="L2" class="content-section" style="background-color: whitesmoke; height: 800px;">
+    <div class="container text-center">
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="block-heading">
+            <h2 style="position: relative; bottom: 60px;">행정동별 현황 </h2>
+          
+            <button id="left_one" value='왼1순' type='button' onclick="check1()" style="width: 3px;  margin: -17px auto 0;
+            display: table;
+            width: auto;
+            background-color: #02ccba;
+            color: #fff;
+            padding: 9px 35px;
+            border-radius: 12px;
+            text-align: center;
+            color: #fff;  margin: 2px; position: relative; bottom: 50px;  font-weight: bold; right:50px;">1순위</button>
+            <button id="left_two" value='왼2순' type='button' onclick="check2()" style="width: 80px; margin: -17px auto 0;
+            display: table;
+            width: auto;
+            background-color: #02ccba;
+            color: #fff;
+            padding: 9px 35px;
+            border-radius: 12px;
+            text-align: center;
+            color: #fff;  margin: 2px; position: relative; left: 70px; bottom: 96px; font-weight: bold; " onclick="check()">2순위</button>
+            <button id="left_three" value='왼3순' type='button' onclick="check3()"style="width: 80px;  margin: -17px auto 0;
+            display: table;
+            width: auto;
+            background-color: #02ccba;
+            color: #fff;
+            padding: 9px 35px;
+            border-radius: 12px;
+            text-align: center;
+            color: #fff; margin: 2px; position: relative; left: 190px; bottom: 142px; font-weight: bold;" onclick="check()">3순위</button>
+            <button id="right_two" type='button' style="width: 80px; background-color:  margin: -17px auto 0;
+            display: table;
+            width: auto;
+            background-color: #02ccba;
+            color: #fff;
+            padding: 9px 35px;
+            border-radius: 12px;
+            text-align: center;
+            color: #fff; margin: 2px; position: relative; bottom: 188px; left: 310px; font-weight: bold;" onclick="check()">4순위</button>
+            <button id="right_three" type='button' style="width: 80px; background-color:  margin: -17px auto 0;
+            display: table;
+            width: auto;
+            background-color: #02ccba;
+            color: #fff;
+            padding: 9px 35px;
+            border-radius: 12px;
+            text-align: center;
+            color: #fff; margin: 2px; position: relative; bottom: 234px; left: 430px; font-weight: bold;" onclick="check()">5순위</button>
+            <button id="right_three" type='button' style="width: 80px; background-color:  margin: -17px auto 0;
+            display: table;
+            width: auto;
+            background-color: #02ccba;
+            color: #fff;
+            padding: 9px 35px;
+            border-radius: 12px;
+            text-align: center;
+            color: #fff; margin: 2px; position: relative; bottom: 280px; left: 550px; font-weight: bold;" onclick="check()">6순위</button>
+            <button id="right_three" type='button' style="width: 80px; background-color:  margin: -17px auto 0;
+            display: table;
+            width: auto;
+            background-color: #02ccba;
+            color: #fff;
+            padding: 9px 35px;
+            border-radius: 12px;
+            text-align: center;
+            color: #fff;  margin: 2px; position: relative; bottom: 326px; left: 670px; font-weight: bold;" onclick="check()">7순위</button>
+            <button id="right_three" type='button' style="width: 80px; background-color:  margin: -17px auto 0;
+            display: table;
+            width: auto;
+            background-color: #02ccba;
+            color: #fff;
+            padding: 9px 35px;
+            border-radius: 12px;
+            text-align: center;
+            color: #fff; margin: 2px; position: relative; bottom: 373px; left: 790px; font-weight: bold;" onclick="check()">8순위</button>
+            <button id="right_three" type='button' style="width: 80px; background-color:  margin: -17px auto 0;
+            display: table;
+            width: auto;
+            background-color: #02ccba;
+            color: #fff;
+            padding: 9px 35px;
+            border-radius: 12px;
+            text-align: center;
+            color: #fff;  margin: 2px; position: relative; bottom: 420px; left: 910px; font-weight: bold;" onclick="check()">9순위</button>
+            <button id="right_three" type='button' style="width: 80px; background-color:  margin: -17px auto 0;
+            display: table;
+            width: auto;
+            background-color: #02ccba;
+            color: #fff;
+            padding: 9px 35px;
+            border-radius: 12px;
+            text-align: center;
+            color: #fff;  margin: 2px; position: relative; bottom: 465px; left: 1030px; font-weight: bold;" onclick="check()">10순위</button>
+
+            <p id='name_1' style="position:relative;bottom: 450px; right:550px;">마포구 서강동</p>
+            <p id='name_2' style="position:relative;bottom: 489px; right:430px;">마포구 상암동</p>
+            <p id='name_3' style="position:relative;bottom: 529px; right:310px;">노원구 상계6,7동</p>
+            <p id='name_4' style="position:relative;bottom: 568px; right:190px;">용산구 한남동</p>
+            <p id='name_5' style="position:relative;bottom: 608px; right:70px;">마포구 대흥동</p>
+            <p id='name_6' style="position:relative;bottom: 647px; left:50px;">중구 회현동</p>
+            <p id='name_7' style="position:relative;bottom: 687px; left:170px;">마포구 합정동</p>
+            <p id='name_8' style="position:relative;bottom: 727px; left:290px;">서초구 서초2동</p>
+            <p id='name_9' style="position:relative;bottom: 766px; left:413px;">종로구 사직동</p>
+            <p id='name_10' style="position:relative;bottom: 806px; left:540px;">강서구 화곡1동</p>
+
+            
+            <iframe src="count.html"  name='i1' width="600px" height ="450px" frameborder="2" framespacing="0"  marginheight="0" marginwidth="0" scrolling="no"style="position: relative; right: 350px; bottom:750px;">1순위</iframe>
+            <iframe src="new_dong_up.html" name='i2' width="600px" height ="450px" frameborder="2" framespacing="0"  marginheight="0" marginwidth="0" scrolling="no"style="position: relative; left: 200px; bottom:1208px; ">1순위</iframe>
+           
+            <h3 style="float: left; position: relative; left: 145px; bottom:750px;">조사 나간 횟수</h3>
+            <h3 style="float: left; position: relative; left: 700px; bottom:750px;">전체 업체수</h3>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+ <!-- 위코드는 오른쪽에 조사나간 횟수 왼쪽에 전체업체수를 지도를 띄우고 1등~10등까지의 결과를 화면에 표시하는 것 -->
+
+  <section class="content-section text-center" id="Portfolio" style="position: relative; height: 240px;">
+    <div id="two" class="container">
+      <div id='L3' class="block-heading">
+        <h2>100 by 100 지역별 위반 위험도</h2>
+        </div> 
+        
+        <iframe src="final_grid.html" width="1000px" height ="500px" frameborder="2" framespacing="0"  marginheight="0" marginwidth="0" scrolling="no"></iframe>
+          
+        <!-- 100 by 100 최종 딥러닝과 머신러닝으로 예측한 결과 지도를 화면에 띄우는 코드 -->
+          <div style="position: relative; top: 30px; float: left; right: 280px;  ">
+            <select id="browsers2" name="browsers2">
+              <option  value="종로구">종로구</option>
+              <option  value="중구">중구</option>
+              <option  value="용산구">용산구</option>
+              <option  value="성동구">성동구</option>
+              <option value="광진구">광진구</option>
+              <option  value="동대문구">동대문구</option>
+              <option  value="중랑구">중랑구</option>
+              <option  value="성북구">성북구</option>
+              <option  value="강북구">강북구</option>
+              <option  value="도봉구">도봉구</option>
+              <option value="노원구">노원구</option>
+              <option  value="은평구">은평구</option>
+              <option  value="서대문구">서대문구</option>
+              <option  value="마포구">마포구</option>
+              <option  value="양천구">양천구</option>
+              <option  value="강서구">강서구</option>
+              <option value="구로구">구로구</option>
+              <option  value="금천구">금천구</option>
+              <option  value="영등포구">영등포구</option>
+              <option  value="동작구">동작구</option>
+              <option  value="관악구">관악구</option>
+              <option  value="서초구">서초구</option>
+              <option value="강남구">강남구</option>
+              <option  value="송파구">송파구</option>
+              <option  value="강동구">강동구</option>
+          </select>
+          
+          <button id="select" type='button' style="width: 80px; height: 40px; background-color: white; border-color: #02ccbb; color:black; border-radius: 10px;" onclick="ch()">선택</button>
+          </div>
+
+          <!-- 여기위는 드롭다운 메뉴를 위한 코드 선택후 눌렀을때 iframe이 바뀌는 코드는 뒤에 -->
+        </section>
+       
+          
+            <script type='text/javascript'>
+                Kakao.init('5545aa1f993e0e99a60c1fefa36c1400');
+                Kakao.Link.createDefaultButton({
+                  container: '#kakao-link-btn',
+                  objectType: 'feed',
+                  content: {
+                    title: '위험지역',
+                    description: '3이1최 web service 바로가기: \n http://d28dcd5d1a3a.ngrok.io',
+                    imageUrl: 'http://drive.google.com/uc?export=view&id=12XF1B0aidoI8H7iKVgY5nmRkuiwdxHCT',
+                    link: {
+                      mobileWebUrl: 'http://d28dcd5d1a3a.ngrok.io',
+                      webUrl: 'http://d28dcd5d1a3a.ngrok.io'
+                    }
+                  },
+                  social: {
+                    likeCount: 286,
+                    commentCount: 45,
+                    sharedCount: 845
+                  }
+               
+                });
+            </script>
+<!-- 여기는 카카오 api공유기능을 위한 코드와 api키 -->
+        
+  <section id="Contact" class="content-section">
+   <div class="container">
+      <div class="block-down">
+    
+      </div>
+      <div>
+      
+
+      </div> 
+    
+    </div>
+ </section>
+ <section id="L4" class="content-section" style="background-color: whitesmoke; height: 600px;">
+  <div class="container text-center">
+    <div class="row">
+      <div class="col-lg-12">
+        <h2 style="position: relative; bottom: 60px;">추천 지역 및 업체 정보 </h2>
+        <div id='clear_iframename1' class="block-heading" style="position: relative; left: 10px;">
+          <iframe id="iframename1" width='800' height='400' name='iframename1'frameborder="2" framespacing="0"  marginheight="0" marginwidth="0" scrolling="no"
+          src='test_0823.html' style="visibility: hidden;" ></iframe>
+        </div>
+        <iframe id="iframename2" width='540' height='400' name='iframename2'frameborder="2" framespacing="0"  marginheight="0" marginwidth="0" scrolling="no"
+        src='' style="position: relative; bottom:470px; right:290px; visibility:hidden;"  ></iframe>
+        <iframe id="iframename4" width='540' height='400' name='iframename4'frameborder="2" framespacing="0"  marginheight="0" marginwidth="0" scrolling="no"
+        src='point.html' style="position: absolute; bottom:519px; left:850px; visibility:hidden;"  ></iframe>
+        
+        <iframe id="iframename3" width='540' height='400' name='iframename3'frameborder="2" framespacing="0"  marginheight="0" marginwidth="0" scrolling="no"
+        src='' style="position: relative; bottom:470px; right:280px; visibility:hidden;"  ></iframe>
+        <h3 id='cal_name3' style='position:relative; bottom:910px;'></h3>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- 여기위는 드롭다운 선택후 화면 3개 분활되는 코드  -->
+<script type="text/javascript">
+  function ch() {
+      var name = document.getElementById("browsers2");
+      var iframename1 = document.getElementById("iframename1");
+      var iframename2 = document.getElementById("iframename2");
+      var iframename3 = document.getElementById("iframename3");
+      var iframename4 = document.getElementById("iframename4");
+      if(name.options[name.selectedIndex].text == "종로구"){
+        
+        if(iframename1.style.visibility!= 'visible'){
+          iframename1.style.visibility = "hidden"; 
+         iframename2.style.visibility = "visible";
+         iframename3.style.visibility = "visible";
+         iframename4.style.visibility = "visible";
+        }
+        document.iframename2.location = "http://naver.me/GpPzjjht";
+        document.iframename3.location = "./allaa0.html";
+        document.getElementById('cal_name3').innerHTML = name.options[name.selectedIndex].text;
+      }
+      else if(name.options[name.selectedIndex].text == "중구"){
+        
+        if(iframename1.style.visibility!= 'visible'){
+          iframename1.style.visibility = "hidden"; 
+         iframename2.style.visibility = "visible";
+         iframename3.style.visibility = "visible";
+         iframename4.style.visibility = "visible";
+        }
+
+         document.iframename2.location = "https://map.naver.com/v5/entry/address/14137308.163967807,4517993.226278631,%EC%84%9C%EC%9A%B8%ED%8A%B9%EB%B3%84%EC%8B%9C%20%EC%A4%91%EA%B5%AC?c=14136130.2462610,4517600.3549675,12,0,0,0,dh";
+         document.iframename3.location = "./allaa1.html";
+         document.getElementById('cal_name3').innerHTML = name.options[name.selectedIndex].text;
+      }
+      else if(name.options[name.selectedIndex].text == "용산구"){
+        
+        if(iframename1.style.visibility!= 'visible'){
+          iframename1.style.visibility = "hidden"; 
+         iframename2.style.visibility = "visible";
+         iframename3.style.visibility = "visible";
+         iframename4.style.visibility = "visible";
+        }
+
+        document.iframename2.location = "http://naver.me/FdFxAxw3";
+        document.iframename3.location = "./allaa2.html";
+        document.getElementById('cal_name3').innerHTML = name.options[name.selectedIndex].text;
+      }
+      else if(name.options[name.selectedIndex].text == "성동구"){
+        
+        if(iframename1.style.visibility!= 'visible'){
+          iframename1.style.visibility = "hidden"; 
+         iframename2.style.visibility = "visible";
+         iframename3.style.visibility = "visible";
+         iframename4.style.visibility = "visible";
+        }
+        document.iframename2.location = "https://map.naver.com/v5/entry/address/14141676.118147556,4517941.686648229,%EC%84%9C%EC%9A%B8%ED%8A%B9%EB%B3%84%EC%8B%9C%20%EC%84%B1%EB%8F%99%EA%B5%AC?c=14138251.3737959,4516816.8754276,12,0,0,0,dh";
+        document.iframename3.location = "./allaa3.html";
+        document.getElementById('cal_name3').innerHTML = name.options[name.selectedIndex].text;
+      }
+      if(name.options[name.selectedIndex].text == "광진구"){
+       
+        if(iframename1.style.visibility!= 'visible'){
+          iframename1.style.visibility = "hidden"; 
+         iframename2.style.visibility = "visible";
+         iframename3.style.visibility = "visible";
+         iframename4.style.visibility = "visible";
+        }
+        document.iframename2.location = "https://map.naver.com/v5/entry/address/14146745.27379981,4514451.345178803,%EC%84%9C%EC%9A%B8%ED%8A%B9%EB%B3%84%EC%8B%9C%20%EA%B4%91%EC%A7%84%EA%B5%AC?c=14143238.8898915,4516453.7995433,12,0,0,0,dh";
+        document.iframename3.location = "./allaa4.html";
+        document.getElementById('cal_name3').innerHTML = name.options[name.selectedIndex].text;
+      }
+      if(name.options[name.selectedIndex].text == "동대문구"){
+
+        if(iframename1.style.visibility!= 'visible'){
+          iframename1.style.visibility = "hidden"; 
+         iframename2.style.visibility = "visible";
+         iframename3.style.visibility = "visible";
+         iframename4.style.visibility = "visible";
+        }
+        document.iframename2.location = "https://map.naver.com/v5/entry/address/14142001.972561006,4519489.16585202,%EC%84%9C%EC%9A%B8%ED%8A%B9%EB%B3%84%EC%8B%9C%20%EB%8F%99%EB%8C%80%EB%AC%B8%EA%B5%AC?c=14139340.6014489,4521460.4248960,12,0,0,0,dh";
+        document.iframename3.location = "./allaa5.html";
+        document.getElementById('cal_name3').innerHTML = name.options[name.selectedIndex].text;
+      }
+      if(name.options[name.selectedIndex].text == "중랑구"){
+
+        if(iframename1.style.visibility!= 'visible'){
+          iframename1.style.visibility = "hidden"; 
+         iframename2.style.visibility = "visible";
+         iframename3.style.visibility = "visible";
+         iframename4.style.visibility = "visible";
+        }
+        document.iframename2.location = "https://map.naver.com/v5/entry/address/14147881.756745216,4523960.929295562,%EC%84%9C%EC%9A%B8%ED%8A%B9%EB%B3%84%EC%8B%9C%20%EC%A4%91%EB%9E%91%EA%B5%AC?c=14144156.1342309,4523084.7117470,12,0,0,0,dh";
+        document.iframename3.location = "./allaa6.html";
+        document.getElementById('cal_name3').innerHTML = name.options[name.selectedIndex].text;
+     }
+      if(name.options[name.selectedIndex].text == "성북구"){
+
+        if(iframename1.style.visibility!= 'visible'){
+          iframename1.style.visibility = "hidden"; 
+         iframename2.style.visibility = "visible";
+         iframename3.style.visibility = "visible";
+         iframename4.style.visibility = "visible";
+        }
+        document.iframename2.location = "https://map.naver.com/v5/entry/address/14139439.865424808,4521582.834908776,%EC%84%9C%EC%9A%B8%ED%8A%B9%EB%B3%84%EC%8B%9C%20%EC%84%B1%EB%B6%81%EA%B5%AC?c=14136283.1203175,4524728.1078551,12,0,0,0,dh";
+        document.iframename3.location = "./allaa7.html";
+        document.getElementById('cal_name3').innerHTML = name.options[name.selectedIndex].text;
+      }
+      if(name.options[name.selectedIndex].text == "강북구"){
+
+        if(iframename1.style.visibility!= 'visible'){
+          iframename1.style.visibility = "hidden"; 
+         iframename2.style.visibility = "visible";
+         iframename3.style.visibility = "visible";
+         iframename4.style.visibility = "visible";
+        }
+        document.iframename2.location = "https://map.naver.com/v5/entry/address/14140412.641927052,4528657.421538444,%EC%84%9C%EC%9A%B8%ED%8A%B9%EB%B3%84%EC%8B%9C%20%EA%B0%95%EB%B6%81%EA%B5%AC?c=14135327.6574640,4530346.2294341,12,0,0,0,dh";
+        document.iframename3.location = "./allaa8.html";
+        document.getElementById('cal_name3').innerHTML = name.options[name.selectedIndex].text;
+      }
+      if(name.options[name.selectedIndex].text == "도봉구"){
+
+        if(iframename1.style.visibility!= 'visible'){
+          iframename1.style.visibility = "hidden"; 
+         iframename2.style.visibility = "visible";
+         iframename3.style.visibility = "visible";
+         iframename4.style.visibility = "visible";
+        }
+        document.iframename2.location = "https://map.naver.com/v5/entry/address/14142825.491889995,4532738.936220409,%EC%84%9C%EC%9A%B8%ED%8A%B9%EB%B3%84%EC%8B%9C%20%EB%8F%84%EB%B4%89%EA%B5%AC?c=14137238.5831711,4533002.4161670,12,0,0,0,dh";
+        document.iframename3.location = "./allaa9.html";
+        document.getElementById('cal_name3').innerHTML = name.options[name.selectedIndex].text;
+      }
+      if(name.options[name.selectedIndex].text == "노원구"){
+
+        if(iframename1.style.visibility!= 'visible'){
+          iframename1.style.visibility = "hidden"; 
+         iframename2.style.visibility = "visible";
+         iframename3.style.visibility = "visible";
+         iframename4.style.visibility = "visible";
+        }
+        document.iframename2.location = "https://map.naver.com/v5/entry/address/14143861.720501993,4530712.082237152,%EC%84%9C%EC%9A%B8%ED%8A%B9%EB%B3%84%EC%8B%9C%20%EB%85%B8%EC%9B%90%EA%B5%AC?c=14142283.4270379,4531492.7848584,12,0,0,0,dh";
+        document.iframename3.location = "./allaa10.html";
+         document.getElementById('cal_name3').innerHTML = name.options[name.selectedIndex].text;
+      }
+      if(name.options[name.selectedIndex].text == "은평구"){
+
+        if(iframename1.style.visibility!= 'visible'){
+          iframename1.style.visibility = "hidden"; 
+         iframename2.style.visibility = "visible";
+         iframename3.style.visibility = "visible";
+         iframename4.style.visibility = "visible";
+        }
+        
+        document.iframename2.location = "https://map.naver.com/v5/entry/address/14129689.75858054,4523462.926216872,%EC%84%9C%EC%9A%B8%ED%8A%B9%EB%B3%84%EC%8B%9C%20%EC%9D%80%ED%8F%89%EA%B5%AC?c=14125085.0956738,4526218.6299067,12,0,0,0,dh";
+        document.iframename3.location = "./allaa11.html";
+        document.getElementById('cal_name3').innerHTML = name.options[name.selectedIndex].text;
+      }
+      if(name.options[name.selectedIndex].text == "서대문구"){
+
+        if(iframename1.style.visibility!= 'visible'){
+          iframename1.style.visibility = "hidden"; 
+         iframename2.style.visibility = "visible";
+         iframename3.style.visibility = "visible";
+         iframename4.style.visibility = "visible";
+        }
+
+        document.iframename2.location = "https://map.naver.com/v5/entry/address/14130539.93892758,4520153.765692186,%EC%84%9C%EC%9A%B8%ED%8A%B9%EB%B3%84%EC%8B%9C%20%EC%84%9C%EB%8C%80%EB%AC%B8%EA%B5%AC?c=14126537.3992112,4521326.6600964,12,0,0,0,dh";
+        document.iframename3.location = "./allaa12.html";
+          document.getElementById('cal_name3').innerHTML = name.options[name.selectedIndex].text;
+      }
+      if(name.options[name.selectedIndex].text == "마포구"){
+   
+        if(iframename1.style.visibility!= 'visible'){
+          iframename1.style.visibility = "hidden"; 
+         iframename2.style.visibility = "visible";
+         iframename3.style.visibility = "visible";
+         iframename4.style.visibility = "visible";
+        }
+        
+        document.iframename2.location = "https://map.naver.com/v5/entry/address/14126609.359027158,4518341.848691117,%EC%84%9C%EC%9A%B8%ED%8A%B9%EB%B3%84%EC%8B%9C%20%EB%A7%88%ED%8F%AC%EA%B5%AC?c=14123537.2458510,4518441.1622787,12,0,0,0,dh";
+        document.iframename3.location = "./allaa13.html";
+          document.getElementById('cal_name3').innerHTML = name.options[name.selectedIndex].text;
+      }
+      if(name.options[name.selectedIndex].text == "양천구"){
+
+        if(iframename1.style.visibility!= 'visible'){
+          iframename1.style.visibility = "hidden"; 
+         iframename2.style.visibility = "visible";
+         iframename3.style.visibility = "visible";
+         iframename4.style.visibility = "visible";
+        }
+        
+        document.iframename2.location = "https://map.naver.com/v5/entry/address/14122730.153071743,4511418.425665675,%EC%84%9C%EC%9A%B8%ED%8A%B9%EB%B3%84%EC%8B%9C%20%EC%96%91%EC%B2%9C%EA%B5%AC?c=14117689.8131872,4513491.8646972,12,0,0,0,dh";
+        document.iframename3.location = "./allaa14.html";
+        document.getElementById('cal_name3').innerHTML = name.options[name.selectedIndex].text;
+      }
+      if(name.options[name.selectedIndex].text == "강서구"){
+
+        if(iframename1.style.visibility!= 'visible'){
+          iframename1.style.visibility = "hidden"; 
+         iframename2.style.visibility = "visible";
+         iframename3.style.visibility = "visible";
+         iframename4.style.visibility = "visible";
+        }
+        
+        document.iframename2.location = "https://map.naver.com/v5/entry/address/14120837.565880965,4516180.897098225,%EC%84%9C%EC%9A%B8%ED%8A%B9%EB%B3%84%EC%8B%9C%20%EA%B0%95%EC%84%9C%EA%B5%AC?c=14113944.3988012,4518938.0029625,12,0,0,0,dh";
+        document.iframename3.location = "./allaa15.html";
+        document.getElementById('cal_name3').innerHTML = name.options[name.selectedIndex].text;
+     }
+      if(name.options[name.selectedIndex].text == "구로구"){
+    
+        if(iframename1.style.visibility!= 'visible'){
+          iframename1.style.visibility = "hidden"; 
+         iframename2.style.visibility = "visible";
+         iframename3.style.visibility = "visible";
+         iframename4.style.visibility = "visible";
+        }
+        
+        document.iframename2.location = "https://map.naver.com/v5/entry/address/14125056.741561268,4508395.504125694,%EC%84%9C%EC%9A%B8%ED%8A%B9%EB%B3%84%EC%8B%9C%20%EA%B5%AC%EB%A1%9C%EA%B5%AC?c=14118645.2760407,4508599.8948870,12,0,0,0,dh";
+        document.iframename3.location = "./allaa16.html";
+         document.getElementById('cal_name3').innerHTML = name.options[name.selectedIndex].text;
+      }
+      if(name.options[name.selectedIndex].text == "금천구"){
+  
+        if(iframename1.style.visibility!= 'visible'){
+          iframename1.style.visibility = "hidden"; 
+         iframename2.style.visibility = "visible";
+         iframename3.style.visibility = "visible";
+         iframename4.style.visibility = "visible";
+        }
+        
+        document.iframename2.location = "https://map.naver.com/v5/entry/address/14125964.830307413,4503010.558150221,%EC%84%9C%EC%9A%B8%ED%8A%B9%EB%B3%84%EC%8B%9C%20%EA%B8%88%EC%B2%9C%EA%B5%AC?c=14122581.7829974,4504109.2194752,12,0,0,0,dh";
+        document.iframename3.location = "./allaa17.html";
+        document.getElementById('cal_name3').innerHTML = name.options[name.selectedIndex].text;
+      }
+      if(name.options[name.selectedIndex].text == "영등포구"){
+
+        if(iframename1.style.visibility!= 'visible'){
+          iframename1.style.visibility = "hidden"; 
+         iframename2.style.visibility = "visible";
+         iframename3.style.visibility = "visible";
+         iframename4.style.visibility = "visible";
+        }
+        
+        document.iframename2.location = "https://map.naver.com/v5/entry/address/14125998.949731346,4512740.91591832,%EC%84%9C%EC%9A%B8%ED%8A%B9%EB%B3%84%EC%8B%9C%20%EC%98%81%EB%93%B1%ED%8F%AC%EA%B5%AC?c=14124110.5235631,4512593.7296149,12,0,0,0,dh";
+        document.iframename3.location = "./allaa18.html";
+        document.getElementById('cal_name3').innerHTML = name.options[name.selectedIndex].text;
+      }
+      if(name.options[name.selectedIndex].text == "동작구"){
+
+        if(iframename1.style.visibility!= 'visible'){
+          iframename1.style.visibility = "hidden"; 
+         iframename2.style.visibility = "visible";
+         iframename3.style.visibility = "visible";
+         iframename4.style.visibility = "visible";
+        }
+        
+        document.iframename2.location = "https://map.naver.com/v5/entry/address/14130840.50155272,4510778.462327093,%EC%84%9C%EC%9A%B8%ED%8A%B9%EB%B3%84%EC%8B%9C%20%EB%8F%99%EC%9E%91%EA%B5%AC?c=14127492.8620647,4509211.3911133,12,0,0,0,dh";
+        document.iframename3.location = "./allaa19.html";
+        document.getElementById('cal_name3').innerHTML = name.options[name.selectedIndex].text;
+      }
+      if(name.options[name.selectedIndex].text == "관악구"){
+
+        if(iframename1.style.visibility!= 'visible'){
+          iframename1.style.visibility = "hidden"; 
+         iframename2.style.visibility = "visible";
+         iframename3.style.visibility = "visible";
+         iframename4.style.visibility = "visible";
+        }
+        
+        document.iframename2.location = "https://map.naver.com/v5/entry/address/14132174.63225403,4505966.62883763,%EC%84%9C%EC%9A%B8%ED%8A%B9%EB%B3%84%EC%8B%9C%20%EA%B4%80%EC%95%85%EA%B5%AC?c=14127435.5342935,4504854.4805010,12,0,0,0,dh";
+        document.iframename3.location = "./allaa20.html";
+        document.getElementById('cal_name3').innerHTML = name.options[name.selectedIndex].text;
+      }
+      if(name.options[name.selectedIndex].text == "서초구"){
+   
+        if(iframename1.style.visibility!= 'visible'){
+          iframename1.style.visibility = "hidden"; 
+         iframename2.style.visibility = "visible";
+         iframename3.style.visibility = "visible";
+         iframename4.style.visibility = "visible";
+        }
+        
+        document.iframename2.location = "https://map.naver.com/v5/entry/address/14138321.68340369,4506751.828599926,%EC%84%9C%EC%9A%B8%ED%8A%B9%EB%B3%84%EC%8B%9C%20%EC%84%9C%EC%B4%88%EA%B5%AC?c=14139627.2403050,4506994.7172930,11,0,0,0,dh";
+        document.iframename3.location = "./allaa21.html";
+        document.getElementById('cal_name3').innerHTML = name.options[name.selectedIndex].text;
+      }
+      if(name.options[name.selectedIndex].text == "강남구"){
+
+        if(iframename1.style.visibility!= 'visible'){
+          iframename1.style.visibility = "hidden"; 
+         iframename2.style.visibility = "visible";
+         iframename3.style.visibility = "visible";
+         iframename4.style.visibility = "visible";
+        }
+        
+        document.iframename2.location = "https://map.naver.com/v5/entry/address/14142842.189813618,4511474.283970451,%EC%84%9C%EC%9A%B8%ED%8A%B9%EB%B3%84%EC%8B%9C%20%EA%B0%95%EB%82%A8%EA%B5%AC?c=14142073.2252101,4509058.5170567,12,0,0,0,dh";
+        document.iframename3.location = "./allaa22.html";
+        document.getElementById('cal_name3').innerHTML = name.options[name.selectedIndex].text;
+      }
+      if(name.options[name.selectedIndex].text == "송파구"){
+
+        if(iframename1.style.visibility!= 'visible'){
+          iframename1.style.visibility = "hidden"; 
+         iframename2.style.visibility = "visible";
+         iframename3.style.visibility = "visible";
+         iframename4.style.visibility = "visible";
+        }
+        
+        document.iframename2.location = "https://map.naver.com/v5/entry/address/14149359.945999566,4511079.071814882,%EC%84%9C%EC%9A%B8%ED%8A%B9%EB%B3%84%EC%8B%9C%20%EC%86%A1%ED%8C%8C%EA%B5%AC?c=14146430.1358224,4510377.0557946,12,0,0,0,dh";
+        document.iframename3.location = "./allaa23.html";
+        document.getElementById('cal_name3').innerHTML = name.options[name.selectedIndex].text;
+      }
+      if(name.options[name.selectedIndex].text == "강동구"){
+ 
+        if(iframename1.style.visibility!= 'visible'){
+          iframename1.style.visibility = "hidden"; 
+         iframename2.style.visibility = "visible";
+         iframename3.style.visibility = "visible";
+         iframename4.style.visibility = "visible";
+        }
+        
+        document.iframename2.location = "https://map.naver.com/v5/entry/address/14151353.43317679,4513259.380365571,%EC%84%9C%EC%9A%B8%ED%8A%B9%EB%B3%84%EC%8B%9C%20%EA%B0%95%EB%8F%99%EA%B5%AC?c=14150003.5668947,4516587.5643428,12,0,0,0,dh";
+        document.iframename3.location = "./allaa24.html";
+        document.getElementById('cal_name3').innerHTML = name.options[name.selectedIndex].text;
+      }
+}; 
+</script>
+<!-- 여기위의 코드는 드롭다운 선택후 선택 버튼을 룰렀을때 iframe의 src를 계속 변화시키면서 각각 위치한 구로 이동하는 코드 -->
+<section id="About" class="content-section" style=" height: 500px;">
+  <div class="container text-center">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="block-heading">
+          <h2 style="position: relative; bottom: 40px;"> </h2>
+          <footer class="footer text-center" style="background-color: white;">
+            <div class="container">
+              <ul class="list-inline">
+                <div>
+                  <h1>감사합니다.</h1>
+                </div>
+              
+                <li class="list-inline-item">
+                  <a class="social-link rounded-circle text-white mr-3" href="javascript:void(0)" style="width: 100px; height: 100px;">
+                    <i class="fa fa-address-card-o fa-2x" aria-hidden="true" style="position: relative; top: 10px;" ></i>
+                    <p style="font-size: 20px; position: relative; top: 10px;">최재혁</p>
+
+                  </a>
+                  </li>
+                  
+                <li class="list-inline-item">
+                  <a class="social-link rounded-circle text-white mr-3" href="javascript:void(0)" style="width: 100px; height: 100px;">
+                    <i class="fa fa-address-card-o fa-2x" aria-hidden="true" style="position: relative; top: 10px;" ></i>
+                    <p style="font-size: 20px; position: relative; top: 10px;">이선엽</p>
+
+                  </a>
+                  </li>
+                   
+                <li class="list-inline-item">
+                  <a class="social-link rounded-circle text-white mr-3" href="javascript:void(0)" style="width: 100px; height: 100px;">
+                    <i class="fa fa-address-card-o fa-2x" aria-hidden="true" style="position: relative; top: 10px;" ></i>
+                    <p style="font-size: 20px; position: relative; top: 10px;">이동찬</p>
+
+                  </a>
+                  </li>
+                      
+                <li class="list-inline-item">
+                  <a class="social-link rounded-circle text-white mr-3" href="javascript:void(0)" style="width: 100px; height: 100px;">
+                    <i class="fa fa-address-card-o fa-2x" aria-hidden="true" style="position: relative; top: 10px;" ></i>
+                    <p style="font-size: 20px; position: relative; top: 10px;">이가은</p>
+
+                  </a>
+                  </li>
+                  </ul>
+
+                <ul class="list-inline">
+                  <li class="list-inline-item">
+                  <a class="social-link rounded-circle text-white mr-3" href="javascript:void(0)" style="width: 100px; height: 100px;">
+                    <i class="fa fa-address-card-o fa-2x" aria-hidden="true" style="position: relative; top: 10px;" ></i>
+                    <p style="font-size: 20px; position: relative; top: 10px;">안예림</p>
+
+                  </a>
+                  </li>
+
+                  <li class="list-inline-item">
+                  <a class="social-link rounded-circle text-white mr-3" href="javascript:void(0)" style="width: 100px; height: 100px;">
+                    <i class="fa fa-address-card-o fa-2x" aria-hidden="true" style="position: relative; top: 10px;" ></i>
+                    <p style="font-size: 20px; position: relative; top: 10px;">이재용</p>
+
+                  </a>
+                  </li>
+
+                  <li class="list-inline-item">
+                  <a class="social-link rounded-circle text-white mr-3" href="javascript:void(0)" style="width: 100px; height: 100px;">
+                    <i class="fa fa-address-card-o fa-2x" aria-hidden="true" style="position: relative; top: 10px;" ></i>
+                    <p style="font-size: 20px; position: relative; top: 10px;">김덕주</p>
+
+                  </a>
+                  </li>
+
+                  <li class="list-inline-item">
+                  <a class="social-link rounded-circle text-white mr-3" href="javascript:void(0)" style="width: 100px; height: 100px;">
+                    <i class="fa fa-address-card-o fa-2x" aria-hidden="true" style="position: relative; top: 10px;" ></i>
+                    <p style="font-size: 20px; position: relative; top: 10px;">공경업</p>
+
+                  </a>
+                  </li>
+              </ul>
+              <br>Copyright © Your Website 2018
+              <br>Designed by Position2
+            </div>
+          </footer>
+    <!-- 이위는 사람들의 이름을 넣은 아이콘 -->
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+</body>
+
+</html>
